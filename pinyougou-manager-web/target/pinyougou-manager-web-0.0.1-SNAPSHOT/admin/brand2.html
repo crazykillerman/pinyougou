@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>品牌管理</title>
+<meta
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+<link rel="stylesheet"
+	href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../plugins/vue/vue.min.js"></script>
+<script type="../plugins/vue/axios.min.js"></script>
+</head>
+
+
+<style>
+.red{
+background-color: red
+	}
+.blue{
+background-color: blue
+	}
+
+table tr td {
+	border: 1px solid gray;
+}
+
+table {
+	border-collapse: collapse;
+	width: 300px;
+}
+
+tr.firstLine {
+	background-color: lightGray;
+}
+</style>
+<body>
+	<div id="div1">
+		当前是第：{{page}}页 <br /> 总共有： {{total}}条记录 <br /> <br />
+		<button @click="change">点击</button>
+		<table align="center">
+			<tr class="firstLine">
+				<td>number</td>
+				<td>name</td>
+				<td>hp</td>
+			</tr>
+	
+			<tr v-for="hero,index in current"  v-bind:class="color"  @click="changecolor">
+				<td v-text="index+1"></td>
+				<td v-text="hero.name"></td>
+				<td v-text="hero.sex"></td>
+			</tr>
+
+		</table>
+		<span v-for="i in totalpage">
+			<td><button @click="change(i)" v-text="i"></button>
+		<td>
+		</span>
+	</div>
+
+	<script>
+
+	var vm = new Vue({
+		el : '#div1',
+		data : {
+			page :1,
+			color:"red",
+			totalpage:3,
+			size : 5,
+			total :10,
+			current:[],
+			Data :[{"name":"a","sex":"1"},{"name":"b","sex":"2"},{"name":"C","sex":"3"},{"name":"d","sex":"4"},
+				{"name":"e","sex":"5"},{"name":"f","sex":"6"},{"name":"g","sex":"7"},{"name":"h","sex":"8"},
+				{"name":"e","sex":"9"},{"name":"f","sex":"10"},{"name":"g","sex":"11"},{"name":"h","sex":"12"},
+				{"name":"e","sex":"13"},{"name":"f","sex":"14"},{"name":"g","sex":"15"},{"name":"h","sex":"16"}],
+		},
+		methods : {  
+			changecolor(){
+				this.color="blue";
+			},
+			
+			change(i){
+					this.page=i;
+					this.Current();
+			},
+			
+			Current(){
+				if(this.page==this.totalpage)
+						{
+					this.current=[];
+					for(var i=0;i<(this.total%(this.page-1));i++){
+					this.current[i]=this.Data[i+(this.page-1)*this.size];}
+						}
+				else	{
+				for(var i=0;i<this.size;i++){
+					this.current[i]=this.Data[i+(this.page-1)*this.size];}
+						}
+					},
+			
+		/* 	 findPage(page,size){
+						var url = "http://how2j.cn/study/json.txt"
+						    axios.get(url).then(function(response) {
+						        this.Data = response.data;
+						        var jsonString = JSON.stringify(jsonObject)
+						        document.getElementById("hero").innerHTML = "通过 axios 获取到的json数据："+ jsonString;
+						    })
+				} */
+			},
+			
+		//初始化函数卡住了会都不执行
+		created(){
+				alert(1);
+		/* 		this.findPage(this.page,this.size);  */
+				this.total= this.Data.length;
+				this.totalpage=Math.ceil(this.total/this.size);
+				this.Current();
+				
+		},
+		
+	
+	})
+</script>
+</body>
+</html>
